@@ -34,17 +34,23 @@ export const SplashScreenProvider = ({
         }
 
         // SLOW PATH: First login or post-onboarding hydration
-        const [levelRes, musclesRes] = await Promise.all([
+        const [levelRes, musclesRes, progressRes] = await Promise.all([
           supabase
             .from("athlete_level")
             .select("*")
             .eq("user_id", user_id)
             .single(),
           supabase.from("muscles").select("*"),
+          supabase
+            .from("v_athlete_progress")
+            .select("*")
+            .eq("user_id", user_id)
+            .single(),
         ]);
 
         if (levelRes.data) await db.athlete_level.put(levelRes.data);
         if (musclesRes.data) await db.muscles.bulkPut(musclesRes.data);
+        if (progressRes.data) await db.athlete_progress.put(progressRes.data);
 
         setIsAppReady(true);
       } catch (error) {

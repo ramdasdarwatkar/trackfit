@@ -14,6 +14,7 @@ import type {
   PersonalRecord,
   Workout,
   WorkoutLog,
+  AthleteProgress,
 } from "../types/database.types";
 
 export class TrackFitDB extends Dexie {
@@ -31,6 +32,7 @@ export class TrackFitDB extends Dexie {
   personal_record!: Table<PersonalRecord, [string, string, string]>;
   workouts!: Table<Workout, string>;
   workout_logs!: Table<WorkoutLog, string>;
+  athlete_progress!: Table<AthleteProgress, string>;
 
   constructor() {
     super("TrackFitDB");
@@ -69,6 +71,9 @@ export class TrackFitDB extends Dexie {
       /* WORKOUT LOGS */
       workout_logs:
         "id, workout_id, exercise_id, set_number, [workout_id+exercise_id+set_number]",
+
+      athlete_progress:
+        "user_id, current_level, level_points, level_completion_percent, points_remaining, avg_weekly_gain, estimated_weeks_to_next_level",
     });
   }
 }

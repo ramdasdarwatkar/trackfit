@@ -77,3 +77,18 @@ body {
 .snap-center {
   scroll-snap-align: center;
 }
+/* Removes the extra width/padding iOS adds to date inputs */
+input[type="date"] {
+  display: block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  min-height: 1.5em; /* Ensures height matches text inputs */
+  width: 100%;
+}
+
+/* Fixes the alignment of the date text inside the box */
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  margin: 0;
+}

@@ -196,6 +196,18 @@ export interface WorkoutLog {
   updated_at: string | null;
 }
 
+export interface AthleteProgress {
+  user_id: string;
+  current_level: string;
+  level_points: number;
+  level_start: number;
+  level_end: number | null;
+  level_completion_percent: number;
+  points_remaining: number;
+  avg_weekly_gain: number;
+  estimated_weeks_to_next_level: number | null;
+}
+
 /* =========================
    SUPABASE DATABASE TYPE
 ========================= */

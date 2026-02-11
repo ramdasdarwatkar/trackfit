@@ -135,6 +135,7 @@ export const OnboardingPage = () => {
                 <Input
                   label="BIRTH DATE"
                   type="date"
+                  className="w-full appearance-none bg-transparent m-0 block min-w-0" // Add these utilities
                   value={formData.birthdate}
                   onChange={(e: any) =>
                     setFormData({ ...formData, birthdate: e.target.value })
