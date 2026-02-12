@@ -22,6 +22,7 @@ export default defineConfig({
         short_name: "TrackFit",
         description: "High performance fitness logging",
         display: "standalone",
+        display_override: ["fullscreen", "minimal-ui"],
         orientation: "portrait",
         theme_color: "#000000", // Fits battery saver / dark theme goals
         scope: "/trackfit/",

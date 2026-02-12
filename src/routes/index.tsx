@@ -3,13 +3,18 @@ import { useAuth } from "../context/AuthContext";
 import { LoginPage } from "../pages/auth/LoginPage";
 import { OnboardingPage } from "../pages/onboarding/OnboardingPage";
 import { Dashboard } from "../pages/dashboard/Dashboard";
-import { SplashScreenProvider } from "../components/ui/SplashScreenProvider";
 import { AppLayout } from "../components/layout/AppLayout";
+import { SplashScreenProvider } from "../components/ui/SplashScreenProvider";
 
 export const AppRoutes = () => {
-  const { user_id, profile } = useAuth();
+  const { user_id, profile, loading } = useAuth();
 
-  // 1. Unauthenticated: Login only
+  // 🔥 THE FIX: While the data loader is running, return null.
+  // This prevents the "Authenticated but no Profile" check from triggering too early.
+  // Because App.tsx shows <Splash /> when loading is true, the user stays on Splash.
+  if (loading) return null;
+
+  // 1. Unauthenticated
   if (!user_id) {
     return (
       <Routes>
@@ -18,7 +23,7 @@ export const AppRoutes = () => {
     );
   }
 
-  // 2. Authenticated but no Profile: Onboarding only
+  // 2. Authenticated but truly no Profile (Onboarding needed)
   if (!profile) {
     return (
       <Routes>
@@ -27,13 +32,12 @@ export const AppRoutes = () => {
     );
   }
 
-  // 3. Fully Hydrated: Wrap pages in Splash and Layout
+  // 3. Fully Hydrated
   return (
     <SplashScreenProvider>
       <AppLayout>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
-          {/* Add future routes here like /workouts, /stats, /profile */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AppLayout>

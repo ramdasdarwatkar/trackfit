@@ -8,7 +8,6 @@ interface AuthContextType {
   profile: UserProfile | null;
   loading: boolean;
   signOut: () => Promise<void>;
-  // 🆕 Added these to handle the redirect after onboarding
   setProfile: (profile: UserProfile | null) => void;
   refreshProfile: () => Promise<void>;
 }
@@ -22,25 +21,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_, session) => {
-      if (session?.user) {
-        setUserId(session.user.id);
-        await runDataLoader(session.user.id);
-      } else {
-        setUserId(null);
-        setProfile(null);
-        setLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const runDataLoader = async (uid: string) => {
-    setLoading(true);
+    // Only trigger global loading if we have no profile in memory
+    if (!profile) setLoading(true);
+
     try {
       let localProfile = await db.user_profile.get(uid);
 
@@ -65,7 +49,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // 🆕 Helper to manually re-run the loader from Onboarding
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        setUserId(session.user.id);
+        await runDataLoader(session.user.id);
+      } else {
+        setUserId(null);
+        setProfile(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const refreshProfile = async () => {
     if (user_id) await runDataLoader(user_id);
   };
@@ -73,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const signOut = async () => {
     await supabase.auth.signOut();
     await db.delete();
-    window.location.reload();
+    window.location.href = "/trackfit/login";
   };
 
   return (

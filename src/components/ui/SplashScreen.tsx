@@ -1,4 +1,4 @@
-export const Splash = () => (
+export const SplashScreen = () => (
   <div className="flex h-screen w-screen items-center justify-center bg-bg-main">
     <div className="flex flex-col items-center gap-4">
       <div className="text-brand-primary animate-pulse font-black italic text-4xl tracking-tighter">

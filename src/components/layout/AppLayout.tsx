@@ -6,7 +6,7 @@ const LayoutContent = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, closeSidebar } = useUI();
 
   return (
-    <div className="flex h-screen bg-black text-white overflow-hidden">
+    <div className="flex h-screen text-white overflow-hidden">
       {/* Sidebar: Persistent on Web (lg:block), Drawer on Mobile */}
       <div className="hidden lg:block w-72 h-full border-r border-slate-900">
         <Sidebar isOpen={true} onClose={() => {}} isStatic={true} />

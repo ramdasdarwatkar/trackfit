@@ -1,17 +1,24 @@
 import { useAuth } from "./context/AuthContext";
+import { AppBackground } from "./components/layout/AppBackground";
 import { AppRoutes } from "./routes";
-import { Splash } from "./components/ui/Splash";
-import { SplashScreenProvider as CacheDataLoader } from "./components/ui/SplashScreenProvider";
+import { SplashScreen } from "./components/ui/SplashScreen";
 
 export default function App() {
-  const { loading } = useAuth();
+  const { loading, user_id } = useAuth();
 
-  // Native feel: Show a clean splash screen while Data Loader runs
-  if (loading) return <Splash />;
+  /**
+   * FIX: We only return the Splash component if the app is loading
+   * AND we don't even have a user session yet. If we have a user_id,
+   * it means the app is just refreshing in the background, so we
+   * keep the current route mounted.
+   */
+  if (loading && !user_id) {
+    return <SplashScreen />;
+  }
 
   return (
-    <CacheDataLoader>
+    <AppBackground>
       <AppRoutes />
-    </CacheDataLoader>
+    </AppBackground>
   );
 }

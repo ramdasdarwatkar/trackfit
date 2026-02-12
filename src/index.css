@@ -3,7 +3,7 @@
 
 @theme {
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-  --color-brand: #0ea5e9;
+  --color-brand: #ff7f50;
 }
 
 :root {
@@ -85,6 +85,7 @@ input[type="date"] {
   appearance: none;
   min-height: 1.5em; /* Ensures height matches text inputs */
   width: 100%;
+  background: transparent;
 }
 
 /* Fixes the alignment of the date text inside the box */
